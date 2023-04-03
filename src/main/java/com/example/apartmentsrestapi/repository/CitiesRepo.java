@@ -19,5 +19,5 @@ public interface CitiesRepo extends JpaRepository<CitiesEntity, Integer>  {
             "JOIN HousesEntity he ON se.id=he.street_id " +
             "GROUP BY ce.name"
     )
-   List findAllHouse();
+   List findAllHouseSql();
 }

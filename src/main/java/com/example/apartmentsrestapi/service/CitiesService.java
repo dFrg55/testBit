@@ -2,14 +2,19 @@ package com.example.apartmentsrestapi.service;
 
 import com.example.apartmentsrestapi.dto.CitiesDto;
 import com.example.apartmentsrestapi.dto.CitiesNumberOfHousesDto;
+import com.example.apartmentsrestapi.dto.CitiesSqlDto;
 import com.example.apartmentsrestapi.repository.CitiesRepo;
 import com.example.apartmentsrestapi.utils.MappingUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
-import com.example.apartmentsrestapi.entity.CitiesEntity;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -17,11 +22,13 @@ public class CitiesService {
 
     private final CitiesRepo citiesRepo;
     private final MappingUtils mappingUtils;
+    private final EntityManager entityManager;
 
-    public CitiesService(CitiesRepo citiesRepo, MappingUtils mappingUtils) {
+    public CitiesService(CitiesRepo citiesRepo, MappingUtils mappingUtils, EntityManager entityManager) {
         this.citiesRepo = citiesRepo;
 
         this.mappingUtils = mappingUtils;
+        this.entityManager = entityManager;
     }
 
     //    public List<CitiesEntity> findAllHouse(){
@@ -53,11 +60,43 @@ public class CitiesService {
                 .collect(Collectors.toList());
     }
 
-    public CitiesDto mapToCitiesDto(CitiesEntity entity) {
-        CitiesDto dto = new CitiesDto();
-        dto.setId(entity.getId());
-        dto.setName(entity.getName());
-        return dto;
+//    public List<Object> findAllHouseSql(){
+//        String Query=" SELECT ce.name , count (ce.name)  FROM CitiesEntity ce " +
+//                "JOIN StreetsEntity se ON ce.id=se.city_id " +
+//                "JOIN HousesEntity he ON se.id=he.street_id " +
+//                "GROUP BY ce.name";
+//        List<Object> list = entityManager.createQuery(Query).getResultList();
+//
+//        return list;
+//    }
+    public List<Map<String,String>> findAllHouseSql() {
+        String Query=" SELECT ce.name , count (ce.name)  FROM CitiesEntity ce " +
+                "JOIN StreetsEntity se ON ce.id=se.city_id " +
+                "JOIN HousesEntity he ON se.id=he.street_id " +
+                "GROUP BY ce.name";
+
+
+        List<Object[]> queryResp = entityManager.createQuery(
+                Query).getResultList();
+        String[] columns = {"name", "count"};
+        List<Map<String,String>> dataList = new ArrayList<>();
+        for(Object[] obj : queryResp) {
+            Map<String,String> row = new HashMap<>(columns.length);
+            for(int i=0; i<columns.length; i++) {
+                if(obj[i]!=null)
+                    row.put(columns[i], obj[i].toString());
+                else
+                    row.put(columns[i], "");
+            }
+            dataList.add(row);
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        //Converting the Object to JSONString
+//        String jsonString = mapper.writeValueAsString(dataList);
+        return dataList;
     }
+
+
+
 
 }

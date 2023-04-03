@@ -8,6 +8,7 @@ import com.example.apartmentsrestapi.service.CitiesService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/cities")
@@ -26,6 +27,9 @@ public class CitiesController
     public List<CitiesDto> findAll() {
         return citiesService.findAll();
     }
-
+    @GetMapping("/test")
+    public List<Map<String,String>> test(){
+        return citiesService.findAllHouseSql();
+    }
 
 }

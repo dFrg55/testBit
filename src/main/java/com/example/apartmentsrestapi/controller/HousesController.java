@@ -27,4 +27,6 @@ public class HousesController {
             return housesService.findAllHousesInCities(city_id);
         }
     }
+
+
 }
