@@ -28,7 +28,6 @@ public class HousesEntity {
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "house_id")
     private List<ApartmentsEntity> ApartmentsEntity;
 
-//    @ManyToOne
-//    private StreetsEntity streetsEntity;
+
 
 }

@@ -27,6 +27,7 @@ public class CitiesEntity {
     private String name;
 
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "city_id")
+
     private List<StreetsEntity> StreetsEntity;
 
 

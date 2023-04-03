@@ -1,10 +1,8 @@
 package com.example.apartmentsrestapi.utils;
 
-import com.example.apartmentsrestapi.dto.CitiesDto;
-import com.example.apartmentsrestapi.dto.CitiesNumberOfHousesDto;
-import com.example.apartmentsrestapi.dto.StreetsDto;
-import com.example.apartmentsrestapi.dto.StreetsNumberOfHousesDto;
+import com.example.apartmentsrestapi.dto.*;
 import com.example.apartmentsrestapi.entity.CitiesEntity;
+import com.example.apartmentsrestapi.entity.HousesEntity;
 import com.example.apartmentsrestapi.entity.StreetsEntity;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +36,18 @@ public class MappingUtils {
         dto.setName(entity.getName());
         dto.setCity_id(entity.getCity_id());
         dto.setNumberOfHouses(NumberOfHouses);
+        return dto;
+    }
+
+    public HouseNumberOfApartmentsDto mapToHouseNumberOfApartmentsDto(HousesEntity entity, Long NumberOfHouses){
+
+        HouseNumberOfApartmentsDto dto = new HouseNumberOfApartmentsDto();
+        dto.setId(entity.getId());
+        dto.setNumber(entity.getNumber());
+        // TODO: попробывать сравнить id улицы и возращать название
+
+//        dto.setNameCite(entity.getStreet_id());
+        dto.setNumberOfApartments(NumberOfHouses);
         return dto;
     }
 

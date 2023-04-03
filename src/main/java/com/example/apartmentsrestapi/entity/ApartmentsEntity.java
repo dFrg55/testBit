@@ -24,6 +24,4 @@ public class ApartmentsEntity {
     @Column(name="house_id")
     private int house_id;
 
-//    @ManyToOne
-//    private HousesEntity housesEntity;
 }

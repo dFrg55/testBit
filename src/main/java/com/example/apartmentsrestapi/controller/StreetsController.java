@@ -23,7 +23,7 @@ public class StreetsController {
 
     @GetMapping
     public List<StreetsDto> findAllHouse(@RequestParam(value="city_id", required=false) Integer city_id) {
-        return (List<StreetsDto>) streetsService.findAllHouse(city_id);
+        return  streetsService.findAllHouse(city_id);
     }
 
     @GetMapping("/all")

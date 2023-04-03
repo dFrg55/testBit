@@ -33,7 +33,7 @@ public class StreetsService {
                                         streets.getHousesEntity().stream().count());
                     })
                     .collect(Collectors.toList());
-        } 
+        }
         else {
             countHouseInStreets = streetsRepo.findAll().stream()
                     .filter(streetsEntity -> city_id.equals(streetsEntity.getCity_id()))
@@ -45,6 +45,7 @@ public class StreetsService {
                     .collect(Collectors.toList());
         }
         return countHouseInStreets;
+
     }
     public List findAll(){
         return streetsRepo.findAll();
