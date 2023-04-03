@@ -2,12 +2,9 @@ package com.example.apartmentsrestapi.service;
 
 import com.example.apartmentsrestapi.dto.CitiesDto;
 import com.example.apartmentsrestapi.dto.CitiesNumberOfHousesDto;
-import com.example.apartmentsrestapi.dto.CitiesSqlDto;
 import com.example.apartmentsrestapi.repository.CitiesRepo;
 import com.example.apartmentsrestapi.utils.MappingUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -69,7 +66,7 @@ public class CitiesService {
 //
 //        return list;
 //    }
-    public List<Map<String,String>> findAllHouseSql() {
+    public List<CitiesNumberOfHousesDto> findAllHouseSql() {
         String Query=" SELECT ce.name , count (ce.name)  FROM CitiesEntity ce " +
                 "JOIN StreetsEntity se ON ce.id=se.city_id " +
                 "JOIN HousesEntity he ON se.id=he.street_id " +
@@ -79,20 +76,14 @@ public class CitiesService {
         List<Object[]> queryResp = entityManager.createQuery(
                 Query).getResultList();
         String[] columns = {"name", "count"};
-        List<Map<String,String>> dataList = new ArrayList<>();
+        List<CitiesNumberOfHousesDto> dataList = new ArrayList<>();
         for(Object[] obj : queryResp) {
-            Map<String,String> row = new HashMap<>(columns.length);
-            for(int i=0; i<columns.length; i++) {
-                if(obj[i]!=null)
-                    row.put(columns[i], obj[i].toString());
-                else
-                    row.put(columns[i], "");
-            }
+            CitiesNumberOfHousesDto row = new CitiesNumberOfHousesDto();
+            row.setName(obj[0].toString());
+            row.setNumberOfHouses(Long.valueOf(obj[1].toString()));
             dataList.add(row);
         }
-        ObjectMapper mapper = new ObjectMapper();
-        //Converting the Object to JSONString
-//        String jsonString = mapper.writeValueAsString(dataList);
+
         return dataList;
     }
 

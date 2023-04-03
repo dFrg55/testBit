@@ -28,7 +28,7 @@ public class CitiesController
         return citiesService.findAll();
     }
     @GetMapping("/test")
-    public List<Map<String,String>> test(){
+    public List<CitiesNumberOfHousesDto> test(){
         return citiesService.findAllHouseSql();
     }
 
