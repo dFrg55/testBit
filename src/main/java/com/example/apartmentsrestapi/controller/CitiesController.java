@@ -1,9 +1,6 @@
 package com.example.apartmentsrestapi.controller;
 
-import com.example.apartmentsrestapi.dto.CitiesDto;
-import com.example.apartmentsrestapi.dto.CitiesNumberOfHousesDto;
-import com.example.apartmentsrestapi.entity.CitiesEntity;
-import com.example.apartmentsrestapi.repository.CitiesRepo;
+import com.example.apartmentsrestapi.dto.CitiesNumHouseDto;
 import com.example.apartmentsrestapi.service.CitiesService;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,16 +17,9 @@ public class CitiesController
         this.citiesService = citiesService;
     }
     @GetMapping
-    public List<CitiesNumberOfHousesDto> findAllHouse() {
-        return  citiesService.findAllHouse();
+    public List<CitiesNumHouseDto> findAllHouse() {
+        return  citiesService.findAllHouseSql();
     }
-    @GetMapping("/all")
-    public List<CitiesDto> findAll() {
-        return citiesService.findAll();
-    }
-    @GetMapping("/test")
-    public List<CitiesNumberOfHousesDto> test(){
-        return citiesService.findAllHouseSql();
-    }
+
 
 }

@@ -1,7 +1,9 @@
 package com.example.apartmentsrestapi.controller;
 
 
+import com.example.apartmentsrestapi.entity.HousesEntity;
 import com.example.apartmentsrestapi.service.HousesService;
+import org.apache.coyote.Response;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,13 +21,15 @@ public class HousesController {
     }
 
     @GetMapping
-    public List findAllHouse(@RequestParam(value="city_id", required=false) Integer city_id){
-        if(city_id==null){
-            return housesService.findAll();
-        }
-        else {
-            return housesService.findAllHousesInCities(city_id);
-        }
+    public List findAllHouse(@RequestParam(value = "city_id", required = false) Integer city_id,
+                             @RequestParam(value = "street_id", required = false) Integer street_id) {
+            return housesService.findAllApartmentSql(city_id,street_id);
+
+    }
+    //Разбор адресной строки
+    @GetMapping("/address")
+    public String findHouse(@RequestParam(value = "address")String address){
+        return housesService.findHouse(address);
     }
 
 

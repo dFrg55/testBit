@@ -5,9 +5,9 @@ import org.springframework.stereotype.Component;
 
 @Data
 @Component
+public class StreetsNumHouseDto {
 
-public class CitiesNumberOfHousesDto {
-    String name;
-    Long numberOfHouses;
+    private String name;
+    private Integer numberOfHouse;
 
 }

@@ -5,11 +5,10 @@ import org.springframework.stereotype.Component;
 
 @Data
 @Component
-public class HouseNumberOfApartmentsDto {
-    private Integer id;
-    private String nameCite;
+public class HouseNumApartmentDto {
+    private String nameCity;
     private String nameStreet;
     private String number;
-    private Integer street_id;
-    private Long NumberOfApartments;
+
+    private Integer numberOfApartment;
 }
