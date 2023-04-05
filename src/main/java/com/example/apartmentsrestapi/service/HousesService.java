@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,11 +42,13 @@ public class HousesService {
 
     //Разбор адресной строки строки
     public String findHouse(String address) {
+        if(address==null)
+            return "Дом отсутсвует в базе данных";
         //Regex для разбора адреса
         //Можно доработать так как тут например не учитываются площади или проспекты вместо названиие улицы
-        Pattern pCity = Pattern.compile("\\S*г\\S+\\s+[ а-яА-Я0-9 ]+(?=д|у|$)");
-        Pattern pStreet = Pattern.compile("\\S*у\\S+\\s+[ а-яА-Я0-9 ]+(?=д|г|$)");
-        Pattern pHome = Pattern.compile("\\S*д\\S+\\s+[ а-яА-Я0-9 ]+(?=у|г|$)");
+        Pattern pCity = Pattern.compile("\\S*г\\S+\\s+[а-яА-Я0-9 ]+(?=д|у|$)");
+        Pattern pStreet = Pattern.compile("\\S*у\\S+\\s+[а-яА-Я0-9 ]+(?=д|г|$)");
+        Pattern pHome = Pattern.compile("\\S*д\\S+\\s+[а-яА-Я0-9 ]+(?=у|г|$)");
         Matcher mCity = pCity.matcher(address);
         Matcher mStreet = pStreet.matcher(address);
         Matcher mHome = pHome.matcher(address);

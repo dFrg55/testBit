@@ -1,9 +1,6 @@
 package com.example.apartmentsrestapi.controller;
 
-
-import com.example.apartmentsrestapi.entity.HousesEntity;
 import com.example.apartmentsrestapi.service.HousesService;
-import org.apache.coyote.Response;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,9 +25,8 @@ public class HousesController {
     }
     //Разбор адресной строки
     @GetMapping("/address")
-    public String findHouse(@RequestParam(value = "address")String address){
+    public String findHouse(@RequestParam(value = "address", required = false)String address){
         return housesService.findHouse(address);
     }
-
 
 }

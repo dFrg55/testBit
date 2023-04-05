@@ -1,7 +1,6 @@
 package com.example.apartmentsrestapi.controller;
 
 import com.example.apartmentsrestapi.repository.ApartmentsRepo;
-import com.example.apartmentsrestapi.repository.CitiesRepo;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController

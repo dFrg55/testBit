@@ -6,7 +6,6 @@ import com.example.apartmentsrestapi.utils.MappingUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class CitiesService {

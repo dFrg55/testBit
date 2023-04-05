@@ -1,13 +1,9 @@
 package com.example.apartmentsrestapi.utils;
 
 import com.example.apartmentsrestapi.dto.*;
-import com.example.apartmentsrestapi.entity.CitiesEntity;
-import com.example.apartmentsrestapi.entity.HousesEntity;
-import com.example.apartmentsrestapi.entity.StreetsEntity;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
-import java.lang.reflect.Field;
 import java.util.*;
 
 @Service
