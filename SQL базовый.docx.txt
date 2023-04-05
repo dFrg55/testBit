@@ -1,0 +1,89 @@
+Для выполнения этих заданий я использовал синтаксис postgresql.
+
+Есть таблицы:
+лицевые счета lsClient с полями client_id integer, idhome integer,idflat integer
+дома    homes    с полями idhome integer, idstreet integer, home_number varchar(10), sq numeric(15,2), build_date datetime
+квартиры flats с полями idflat integer, idhome integer, flat_number varchar(10), sq numeric(15,2)
+улицы   di_street с полями idstreet integer, idcity integer, street_name varchar(150)
+города  di_city с полями idcity integer, city_name varchar(60)
+Задание 1
+Написать запрос, отбирающий все лицевые счета улицы Звездная, города Ярославля.
+SELECT lsClient.*
+FROM lsClient
+JOIN flats ON lsClient.idflat = flats.idflat
+JOIN homes ON flats.idhome = homes.idhome
+JOIN di_street ON homes.idstreet = di_street.idstreet
+JOIN di_city ON di_street.idcity = di_city.idcity 
+WHERE di_city.city_name LIKE 'Ярославль'
+AND 
+di_street.street_name LIKE 'Звездная'
+
+Задание 2
+Написать запрос, подсчитывающий количество лицевых счетов дома по адресу г.Ярославль ул.Звездная дом 3, 
+у которых площадь квартир больше 42 кв.м.
+SELECT Count(*)
+FROM lsClient
+JOIN flats ON lsClient.idflat = flats.idflat
+JOIN homes ON flats.idhome = homes.idhome
+JOIN di_street ON homes.idstreet = di_street.idstreet
+JOIN di_city ON di_street.idcity = di_city.idcity 
+WHERE di_city.city_name LIKE 'Ярославль'
+AND 
+di_street.street_name LIKE 'Звездная'
+AND 
+homes.home_number='3'
+AND
+flats.sq>42
+
+
+Задание 3
+Написать запрос, отбирающий все дома с указанием полного адреса и срока эксплуатации(лет), расположенные по адресу 
+улица Светлая г. Ростов, дата постройки которых превышает 25 лет.
+SELECT di_city.city_name,di_street.street_name,homes.home_number,
+date_part('year',age(LOCALTIMESTAMP, homes.build_date)) as service_life 
+FROM lsClient
+JOIN flats ON lsClient.idflat = flats.idflat
+JOIN homes ON flats.idhome = homes.idhome
+JOIN di_street ON homes.idstreet = di_street.idstreet
+JOIN di_city ON di_street.idcity = di_city.idcity 
+WHERE di_city.city_name LIKE 'Ростов'
+AND 
+di_street.street_name LIKE 'Светлая'
+AND 
+date_part('year',age(LOCALTIMESTAMP, homes.build_date))>25 
+Задание 4
+Написать запрос, отбирающий дома с наименьшей датой постройки build_date и площадью дома, превышающей сумму площадей всех его квартир на 100 кв.м.
+SELECT di_city.city_name,di_street.street_name,homes.home_number,homes.build_date,homes.sq
+FROM lsClient
+JOIN flats ON lsClient.idflat = flats.idflat
+JOIN homes ON flats.idhome = homes.idhome
+JOIN di_street ON homes.idstreet = di_street.idstreet
+JOIN di_city ON di_street.idcity = di_city.idcity
+WHERE (homes.sq-(SELECT SUM(f.sq) FROM flats f WHERE f.idhome =homes.idhome))>100
+AND homes.build_date = (
+	SELECT homes.build_date from homes
+	WHERE (homes.sq-(SELECT SUM(f.sq) FROM flats f WHERE f.idhome =homes.idhome))>100
+	ORDER BY  homes.build_date DESC LIMIT 1
+)
+
+//
+Так как в условии сказано, что отбираются дома с наименьшей датой постройки то я это понял как то, что должен вывестись не один дом с наименьшей датой постройки, а дома с наименьшей датой постройки, построенные в одно и то же время.
+
+ 
+
+Задание 5
+Написать функцию, возвращающую площадь дома по его идентификатору(idhome)
+CREATE OR REPLACE FUNCTION sq_home_by_id(val_idhome int)
+    RETURNS numeric
+AS $$ 
+declare
+   sq numeric;
+  BEGIN
+      SELECT homes.sq INTO sq
+		FROM homes 
+		WHERE homes.idhome=val_idhome;
+	  return sq;
+  END;
+$$
+LANGUAGE plpgsql;
+
