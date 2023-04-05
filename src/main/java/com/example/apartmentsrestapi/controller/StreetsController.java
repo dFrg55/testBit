@@ -27,11 +27,5 @@ public class StreetsController {
         return streetsService.findAllHouseSql(city_id);
     }
 
-    @GetMapping("/i")
-    public List fl(){
-
-        return streetsRepo.findAll();
-
-    }
 }
 

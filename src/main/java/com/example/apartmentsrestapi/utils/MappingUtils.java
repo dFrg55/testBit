@@ -18,22 +18,8 @@ public class MappingUtils {
         this.entityManager = entityManager;
     }
 
-    public List<Map<String,String>> QueryMapToList(String[] columns,String query){
 
-        List<Object[]> queryResp = entityManager.createQuery(query).getResultList();
-        List<Map<String,String>> dataList = new ArrayList<>();
-        for(Object[] obj : queryResp) {
-            Map<String,String> row = new LinkedHashMap<>(columns.length);
-            for(int i=0; i<columns.length; i++) {
-                if(obj[i]!=null)
-                    row.put(columns[i], obj[i].toString());
-                else
-                    row.put(columns[i], "");
-            }
-            dataList.add(row);
-        }
-        return dataList;
-    }
+
     public List<CitiesNumHouseDto> MapToCitiesNumHouseDto(String query){
         List<Object[]> queryResp = entityManager.createQuery(query).getResultList();
         List<CitiesNumHouseDto> dataList = new ArrayList<>();
@@ -45,6 +31,7 @@ public class MappingUtils {
         }
         return dataList;
     }
+
     public List<StreetsNumHouseDto> MapToStreetsNumHouseDto(String query){
         List<Object[]> queryResp = entityManager.createQuery(query).getResultList();
         List<StreetsNumHouseDto> dataList = new ArrayList<>();
@@ -70,37 +57,5 @@ public class MappingUtils {
         }
         return dataList;
     }
-//    public List<CitiesNumHouseDto> MapToCitiesNumHouseDto(String[] columns,String query){
-//        List<CitiesNumHouseDto> queryResp = entityManager.createQuery(query).getResultList();
-//        return queryResp;
-//    }
-
-
-
-
-
-//    public List<T> QueryMapToList(String[] columns,String query){
-//
-//        List<Object[]> queryResp = entityManager.createQuery(query).getResultList();
-//        List<T> dataList = new ArrayList<>();
-//        for(Object[] obj : queryResp) {
-////            T row = new LinkedHashMap<>(columns.length);
-//            T t =new Dto();
-//            Class<? extends Object> clazz = citiesDto.getClass();
-//            Field[] fields = clazz.getDeclaredFields();
-//            for(Field field: fields){
-//                String fieldName = field.getName();
-//                System.out.println(field.getName());
-//            }
-//            for(int i=0; i<columns.length; i++) {
-//                if(obj[i]!=null)
-//                    row.put(columns[i], obj[i].toString());
-//                else
-//                    row.put(columns[i], "");
-//            }
-//            dataList.add(row);
-//        }
-//        return dataList;
-//    }
 
 }

@@ -20,7 +20,6 @@ public class CitiesService {
         this.mappingUtils = mappingUtils;
     }
 
-
     public List<CitiesNumHouseDto> findAllHouseSql() {
 
         String query = "SELECT ce.name as name, count (ce.name)  FROM CitiesEntity ce " +
@@ -30,6 +29,4 @@ public class CitiesService {
 
         return mappingUtils.MapToCitiesNumHouseDto(query);
     }
-
-
 }

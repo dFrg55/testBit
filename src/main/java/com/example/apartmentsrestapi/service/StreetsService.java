@@ -5,10 +5,8 @@ import com.example.apartmentsrestapi.repository.StreetsRepo;
 import com.example.apartmentsrestapi.utils.MappingUtils;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+
 
 @Service
 public class StreetsService {
@@ -24,14 +22,6 @@ public class StreetsService {
         return streetsRepo.findAll();
     }
 
-//    public List<Map<String,String>> findAllHouseSql() {
-//        String[] columns = {"name","numberOfHouses"};
-//        String query = "SELECT se.name , count (se.name)  FROM  StreetsEntity se " +
-//                " JOIN HousesEntity he ON se.id=he.street_id " +
-//                " GROUP BY se.name ";
-//        return mappingUtils.QueryMapToList(columns,query);
-//    }
-
     public List<StreetsNumHouseDto> findAllHouseSql(Integer city_id) {
 
 
@@ -44,7 +34,7 @@ public class StreetsService {
         }
         query = query + " GROUP BY se.name ";
         System.out.println(query);
-        return mappingUtils.MapToStreetsNumHouseDto( query);
+        return mappingUtils.MapToStreetsNumHouseDto(query);
     }
 
 }

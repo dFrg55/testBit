@@ -6,27 +6,23 @@ import com.example.apartmentsrestapi.entity.HousesEntity;
 import com.example.apartmentsrestapi.entity.StreetsEntity;
 import com.example.apartmentsrestapi.repository.CitiesRepo;
 import com.example.apartmentsrestapi.utils.MappingUtils;
-import org.apache.coyote.Response;
 import org.springframework.stereotype.Service;
 
 
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class HousesService {
     private final CitiesRepo citiesRepo;
     private final MappingUtils mappingUtils;
 
-
     public HousesService(CitiesRepo citiesRepo, MappingUtils mappingUtils) {
         this.citiesRepo = citiesRepo;
         this.mappingUtils = mappingUtils;
 
-    }
-
-    public List findAll() {
-        return citiesRepo.findAll();
     }
 
     public List<HouseNumApartmentDto> findAllApartmentSql(Integer city_id, Integer street_id) {
@@ -45,18 +41,34 @@ public class HousesService {
         return mappingUtils.MapToHouseNumApartmentDto(query);
     }
 
+    //Разбор адресной строки строки
     public String findHouse(String address) {
+        //Regex для разбора адреса
+        //Можно доработать так как тут например не учитываются площади или проспекты вместо названиие улицы
+        Pattern pCity = Pattern.compile("\\S*г\\S+\\s+[ а-яА-Я0-9 ]+(?=д|у|$)");
+        Pattern pStreet = Pattern.compile("\\S*у\\S+\\s+[ а-яА-Я0-9 ]+(?=д|г|$)");
+        Pattern pHome = Pattern.compile("\\S*д\\S+\\s+[ а-яА-Я0-9 ]+(?=у|г|$)");
+        Matcher mCity = pCity.matcher(address);
+        Matcher mStreet = pStreet.matcher(address);
+        Matcher mHome = pHome.matcher(address);
+
+        //Запрос в бд
         List<CitiesEntity> citiesEntities = citiesRepo.findAll();
-        for (CitiesEntity city :
-                citiesEntities) {
-            if (address.contains(city.getName())) {
-                for (StreetsEntity streets :
-                        city.getStreetsEntity()) {
-                    if (address.contains(streets.getName())) {
-                        for (HousesEntity houses :
-                                streets.getHousesEntity()) {
-                            if (address.contains(houses.getNumber())){
-                                return Integer.toString(houses.getId());
+        if (mCity.find() & mStreet.find() & mHome.find()) {
+            String sCity = address.substring(mCity.start(), mCity.end());
+            String sStreet = address.substring(mStreet.start(), mStreet.end());
+            String sHome = address.substring(mHome.start(), mHome.end());
+            for (CitiesEntity city :
+                    citiesEntities) {
+                if (sCity.contains(city.getName())) {
+                    for (StreetsEntity streets :
+                            city.getStreetsEntity()) {
+                        if (sStreet.contains(streets.getName())) {
+                            for (HousesEntity houses :
+                                    streets.getHousesEntity()) {
+                                if (sHome.contains(houses.getNumber())) {
+                                    return Integer.toString(houses.getId());
+                                }
                             }
                         }
                     }
@@ -65,5 +77,4 @@ public class HousesService {
         }
         return "Дом отсутсвует в базе данных";
     }
-
 }
